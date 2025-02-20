@@ -1,0 +1,91 @@
+cluster:
+  name: "dev"
+
+#
+# Destinations
+#
+
+destinations: 
+  - name: mimir
+    type: prometheus
+    url: https://prometheus-prod-22-prod-eu-west-3.grafana.net/api/prom/push
+    auth:
+      type: basic
+      usernameKey: USERNAME_MIMIR
+      passwordKey: PASSWORD
+    secret:
+      create: false
+      name: productdeveun_grafana
+      namespace: observability
+  - name: loki
+    type: loki
+    url: https://logs-prod-013.grafana.net/loki/api/v1/push
+    auth:
+      type: basic
+      usernameKey: USERNAME_LOKI
+      passwordKey: PASSWORD
+    secret:
+      create: false
+      name: productdeveun_grafana
+      namespace: observability
+  - name: pyroscope
+    type: pyroscope
+    url: https://profiles-prod-004.grafana.net
+    auth:
+      type: basic
+      usernameKey: USERNAME_PYROSCOPE
+      passwordKey: PASSWORD
+    secret:
+      create: false
+      name: productdeveun_grafana
+      namespace: observability
+
+#
+# Features
+#
+
+clusterMetrics:
+  enabled: true
+
+  node-exporter:
+    metricsTuning:
+      includeMetrics:
+        - node_uname_info
+      excludeMetrics: 
+        - node_filesystem_.*
+        - node_network_.*
+  
+  windows-exporter:
+    enabled: false
+
+clusterEvents:
+  enabled: true
+
+nodeLogs:
+  enabled: true
+
+podLogs:
+  enabled: true
+
+  excludeNamespaces: 
+    - "observability"
+    - "argocd"
+
+profiling:
+  enabled: true
+
+#
+# Collectors (Alloy instances)
+#
+
+alloy-metrics:
+  enabled: true
+
+alloy-singleton:
+  enabled: true
+
+alloy-logs:
+  enabled: true
+
+alloy-profiles:
+  enabled: true
